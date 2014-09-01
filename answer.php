@@ -16,8 +16,8 @@ function displayWines($wineName, $wineryName, $regionName, $grapeVariety, $year)
 				gv.variety,
 				inv.cost,
 				inv.on_hand, 
-				(SELECT SUM(items.qty) FROM items WHERE items.wine_id = w.wine_id) AS total_sold,
-				(SELECT SUM(items.price) FROM items WHERE items.wine_id = w.wine_id) AS revenue
+				(SELECT SUM(it.qty) FROM items AS it WHERE it.wine_id = w.wine_id) AS total_sold,
+				(SELECT SUM(it.price) FROM items AS it WHERE it.wine_id = w.wine_id) AS wine_revenue
 			FROM 
 				grape_variety AS gv
 					JOIN 
@@ -25,18 +25,19 @@ function displayWines($wineName, $wineryName, $regionName, $grapeVariety, $year)
 					JOIN wine AS w ON wine_variety.wine_id =  w.wine_id
 					JOIN winery AS wy ON w.winery_id = wy.winery_id
 					JOIN region AS r ON wy.region_id = r.region_id 
-					JOIN inventory AS inv ON w.wine_id = inv.wine_id"; 
+					JOIN inventory AS inv ON w.wine_id = inv.wine_id
+		"; 
 			
 	// if statements to check values
 
 	if (!empty($wineName)) 
-		$query .= " AND w.wine_name LIKE \"%$wineName%\"";
+		$query .= " AND w.wine_name = \"$wineName\""; 
 	
 	if (!empty($wineryName)) 
-		$query .= " AND wy.winery_name LIKE \"%$wineryName%\"";
+		$query .= " AND wy.winery_name = \"$wineryName\"";
 	
 	if (!empty($regionName)) 
-		$query .= " AND r.region_name = \"$region\"";
+		$query .= " AND r.region_name = \"$regionName\"";
 		
 	if (!empty($grapeVariety)) 
 		$query .= " AND gv.variety = \"$grapeVariety\"";
@@ -60,15 +61,13 @@ function displayWines($wineName, $wineryName, $regionName, $grapeVariety, $year)
 		$query .= " AND inv.cost <= \"$maxPrice\"";
 		
 	// Finish query 
-	$query .= "
-		ORDER BY w.wine_name";
-
-		
-	echo $query; 
+	$query .= "ORDER BY w.wine_name";
+	
     //execute the query. 
     return $link->query($query);
 }
-echo $wineName; 
+
+
 function generatePage(){
     $t = new MiniTemplator;
 
@@ -76,36 +75,40 @@ function generatePage(){
 	
 	// GET variables
 	$wineName = $_GET['wineName']; 
-	$wineryName = $_GET['wineryName'];
-	$regionName = $_GET['regionName']; 
-	$grapeVariety = $_GET['grapeVariety']; 
-	$minYear = $_GET['minYear'];
-	$maxYear = $_GET['maxYear'];
+	$wineryName = $_GET['wineryName']; 
+	if ($_GET['regionName'] != "All")
+		$regionName = $_GET['regionName'];
+	if ($_GET['grapeVariety'] != "All")
+		$grapeVariety = $_GET['grapeVariety'];
+	if ($_GET['minYear'] != "All")
+		$minYear = $_GET['minYear'];
+	if ($_GET['maxYear'] != "All")
+		$maxYear = $_GET['maxYear'];
 	$minStock = $_GET['minStock'];
 	$maxStock = $_GET['maxStock'];
 	$minPrice = $_GET['minPrice'];
-	$maxPrice = $_GET['maxPrice'];
-	
-	
+	$maxPrice = $_GET['maxPrice'];	
+
 	// Set specified variables
-	$rows = displayWines($$wineName, $wineryName, $regionName, $grapeVariety, $year);
+	$rows = displayWines($wineName, $wineryName, $regionName, $grapeVariety, $year);
 		
 	while ($row =  mysqli_fetch_array($rows)){
-	$t->setVariable('wineID',$row['wine_id']);
-	$t->setVariable('wineName', $row['wine_name']);
-	$t->setVariable('regionName', $row['region_name']);
-	$t->setVariable('grapeVariety', $row['variety']);
-	$t->setVariable('year', $row['year']);
-	$t->setVariable('cost', $row['cost']);
-	$t->setVariable('stock', $row['on_hand']);
-	$t->setVariable('totalSold', $row['total_sold']);
-	$t->setVariable('revenue', $row['revenue']);
-	
-	$t->addBlock("wines"); 
+		$t->setVariable('wineID',$row['wine_id']);
+		$t->setVariable('wineName', $row['wine_name']);
+		$t->setVariable('regionName', $row['region_name']);
+		$t->setVariable('grapeVariety', $row['variety']);
+		$t->setVariable('year', $row['year']);
+		$t->setVariable('cost', $row['cost']);
+		$t->setVariable('stock', $row['on_hand']);
+		$t->setVariable('totalSold', $row['total_sold']);
+		$t->setVariable('revenue', $row['wine_revenue']);
+		
+		$t->addBlock("wines"); 
 	}
 	$t->generateOutput();
 
 }
+
 generatePage();
 	
 ?>

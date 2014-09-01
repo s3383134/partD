@@ -1,0 +1,58 @@
+<html>
+
+<head>
+<title>Winestore Database</title>
+</head>
+
+<body>
+
+<h3>Winestore Database Search v3.0</h3>
+
+<p>Enter your search terms</p>
+<form action="answer.php" method="GET">
+    <br>Wine Name: 
+    <input type="text" name="wineName" value="">
+	<br>Winery Name:
+	<input type="text" name="wineryName" value=""> 
+	<br>Region: 
+	<select name="regionName">
+	<!-- $BeginBlock regionName -->
+		<option value="${regionName}">${regionName}</option>
+	<!-- $EndBlock regionName -->
+	</select>
+	<br>Grape Variety: 
+	<select name="variety">
+	<option value = "All">All</option> 
+	<!-- $BeginBlock variety -->
+		<option value="${variety}">${variety}</option>
+	<!-- $EndBlock variety -->
+	</select>
+	<br>Min Year:  
+	<select name="minYear">
+	<option value = "All">All</option> 
+	<!-- $BeginBlock minYear -->
+		<option value="${minYear}">${minYear}</option>
+	<!-- $EndBlock minYear -->
+	</select>
+	<br>Max Year:  
+	<select name="maxYear">
+	<option value = "All">All</option> 
+	<!-- $BeginBlock maxYear -->
+		<option value="${maxYear}">${maxYear}</option>
+	<!-- $EndBlock maxYear -->
+	</select>
+	<br>Minimum Stock Count: 
+	<input type="number" name="minStock" value=""> 
+	<br>Maximum Stock Count: 
+	<input type="number" name="maxStock" value="">
+	<br>Minimum Price: 
+	<input type="number" name="minPrice" value=""> 
+	<br>Maximum Price: 
+	<input type="number" name="maxPrice" value="">
+    <br><br><input type="submit" value="Search">
+  </form>
+<br>
+ 
+
+</body>
+</html>

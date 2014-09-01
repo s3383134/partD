@@ -1,0 +1,43 @@
+<html>
+
+<head>
+<title>Winestore Database</title>
+</head>
+
+<body>
+
+<h3>Winestore Database Search v3.0</h3>
+
+<p>Search Results</p>
+
+<table border="1" cellpadding="3" cellspacing="0">
+	<tr>
+		<td bgcolor="#D0D0D0">Wine ID</td>
+		<td bgcolor="#D0D0D0">Wine Name</td>
+		<td bgcolor="#D0D0D0">Winery Name</td>
+		<td bgcolor="#D0D0D0">Region Name</td>
+		<td bgcolor="#D0D0D0">Grape Variety</td>
+		<td bgcolor="#D0D0D0">Year</td>
+		<td bgcolor="#D0D0D0">Cost</td>
+		<td bgcolor="#D0D0D0">Stock Count</td>
+		<td bgcolor="#D0D0D0">Total Sold</td>
+		<td bgcolor="#D0D0D0">Revenue</td>
+	</tr>
+ 
+	<!-- $BeginBlock wines -->
+	<tr>
+		<td align="center" bgcolor="#F0F0F0">${wineID}</td>
+		<td align="right">${wineName}</td>
+		<td align="right">${regionName}</td>
+		<td align="right">${grapeVariety}</td>
+		<td align="right">${year}</td>
+		<td align="right">${cost}</td>
+		<td align="right">${stock}</td>
+		<td align="right">${totalSold}</td>
+		<td align="right">${revenue}</td>
+	</tr>
+	<!-- $EndBlock wines -->
+</table>
+
+</body>
+</html>
